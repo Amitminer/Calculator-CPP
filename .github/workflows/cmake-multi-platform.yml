@@ -65,12 +65,12 @@ jobs:
         path: ${{ steps.strings.outputs.build-output-dir }}
 
   release:
-    permissions: write-all
-    needs: build
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
+  permissions: write-all
+  needs: build
+  runs-on: ubuntu-latest
+  if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
 
-    steps:
+  steps:
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -88,7 +88,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.get_release_url.outputs.URL }}
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{ steps.prepare_artifact_metadata.outputs.ARTIFACT_PATH }}/my-build-artifacts.zip
         asset_name: ${{ steps.prepare_artifact_metadata.outputs.ARTIFACT_NAME }}/my-build-artifacts.zip
         asset_content_type: application/gzip
+
