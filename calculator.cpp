@@ -1,6 +1,7 @@
 #include <iostream>
 #include <functional>
 #include <map>
+#include <limits>
 
 using namespace std;
 
@@ -41,15 +42,20 @@ void getCalculatorInput(float& num1, float& num2, int& operation) {
          << "3. Multiply\n"
          << "4. Divide\n"
          << "Enter your choice (1-4): ";
-    cin >> operation;
-    
+
+    // Error handling for invalid operation choice
+    while (!(cin >> operation) || operation < 1 || operation > 4) {
+        cout << "Invalid choice! Please enter a number between 1 and 4: ";
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+
     cout << "Enter first number: ";
     cin >> num1;
 
     cout << "Enter second number: ";
     cin >> num2;
 }
-
 
 int main() {
     float num1, num2;
@@ -61,11 +67,11 @@ int main() {
 
     // Map operation numbers to member function pointers
     map<int, function<float()>> operations = {
-    {1, [&calc]() { return calc.add(); }},
-    {2, [&calc]() { return calc.subtract(); }},
-    {3, [&calc]() { return calc.multiply(); }},
-    {4, [&calc]() { return calc.divide(); }}
-};
+        {1, [&calc]() { return calc.add(); }},
+        {2, [&calc]() { return calc.subtract(); }},
+        {3, [&calc]() { return calc.multiply(); }},
+        {4, [&calc]() { return calc.divide(); }}
+    };
 
     auto it = operations.find(operation);
     if (it != operations.end()) {
