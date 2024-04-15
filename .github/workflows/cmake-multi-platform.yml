@@ -65,6 +65,7 @@ jobs:
         path: ${{ steps.strings.outputs.build-output-dir }}
 
   release:
+    permissions: write-all
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev' && github.event_name == 'push'
